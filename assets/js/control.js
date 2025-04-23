@@ -94,3 +94,50 @@ let validate = () => {
 
     return isValid;
 }
+
+class Member {
+    #password;
+    constructor(firstName, lastName, email, password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.#password = password;
+    }
+    get firstName() {
+        return this.firstName;
+    }
+    set firstName(value) {
+        this.firstName = value;
+    }
+    get lastName() {
+        return this.lastName;
+    }
+    set lastName(value) {
+        this.lastName = value;
+    }
+    get email() {
+        return this.email;
+    }
+    set email(value) {
+        this.email = value;
+    }
+    get fullName() {
+        return `${this.firstName} ${this.lastName}`;
+    }
+    get password() {
+        return this.#password;
+    }
+    set password(value) {
+        this.#password = value;
+    }
+}
+let Members = [];
+
+const newMember = new Member(firstNameValue, lastNameValue, emailValue, passwordValue);
+let addMember = (newMember) => {
+    Members.push(newMember);
+    console.log(Members);
+    alert("Member added successfully!");
+    console.log(Members);
+    return true;
+}
