@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;700;900&display=swap');
+
 :root {
     --color-icons: yellow;
     --color-dark: #37393a;
@@ -16,24 +17,20 @@
     --font-weight-normal: 300;
     --font-weight-bolder: 900;
     --font-family-primary: "Poppins", sans-serif;
-
 }
-
 
 body {
     background-color: var(--color-bg-body);
     font-family: var(--font-family-primary);
+    font-size: var(--font-size-primary);
+    line-height: 1.6;
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 .notibody .card-header {
     color: var(--color-light);
-    font-size: var(--font-size-primary);
-    ;
 }
-
-/* ul {
-    list-style-type: none;
-} */
 
 a {
     text-decoration: none;
@@ -79,7 +76,6 @@ a {
     font-weight: var(--font-weight-bold);
 }
 
-/*hover effect*/
 .searchButton:hover {
     color: #fff;
     background-color: #1A1A1A;
@@ -106,7 +102,6 @@ nav {
     background-color: var(--color-darkest);
 }
 
-/* From Uiverse.io by SouravBandyopadhyay */
 .notification {
     display: flex;
     flex-direction: column;
@@ -119,7 +114,12 @@ nav {
     overflow: hidden;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     --gradient: linear-gradient(to bottom, #2eadff, #3d83ff, #7e61ff);
-    --color: #32a6ff
+    --color: #32a6ff;
+    transition: transform 0.3s ease;
+}
+
+.notification:hover {
+    transform: translateY(-5px);
 }
 
 .notification:before {
@@ -156,9 +156,10 @@ nav {
     color: var(--color);
     padding: 0.65rem 0.25rem 0.4rem 1.25rem;
     font-weight: var(--font-weight-bold);
-    font-size: 2.1rem;
+    font-size: clamp(1.8rem, 3vw, 2.1rem);
     transition: transform 300ms ease;
     z-index: 5;
+    line-height: 1.3;
 }
 
 .notification:hover .notititle {
@@ -166,12 +167,13 @@ nav {
 }
 
 .notibody {
-    color: var(--color-light);
-    padding: 0 1.25rem;
+    color: rgba(255, 255, 255, 0.9);
+    padding: 1.2rem;
     transition: transform 300ms ease;
     z-index: 5;
     font-family: var(--font-family-primary);
-    font-size: 1.2rem;
+    font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+    line-height: 1.7;
 }
 
 .notification:hover .notibody {
@@ -219,20 +221,19 @@ nav {
 .notibody .card-list {
     font-size: calc(var(--font-size-primary)/1.2);
     color: var(--color-primary);
+    margin-bottom: 0.6rem;
 }
 
 .section-div {
     height: fit-content;
-    
 }
-
 
 .first-section {
     padding: 20px;
     margin: calc(var(--margin-primary)) auto;
     max-width: 100%;
     display: flex;
-    height: 94vh;
+    height: auto;
     flex-wrap: wrap;
     justify-content: space-between;
     background-color: var(--color-darkest);
@@ -243,18 +244,19 @@ nav {
     width: 100%;
     display: flex;
     justify-content: space-around;
+    flex-wrap: wrap;
 }
 
 section .section-header {
-    font-size: calc(var(--font-size-primary)*3);
+    font-size: clamp(1.8rem, 4vw, 3rem);
     font-weight: var(--font-weight-bold);
     font-family: var(--font-family-primary);
     color: var(--color-primary);
     background-color: var(--color-dark);
     padding: 20px 50px 20px 20px;
-    border-radius: 0 0 calc(var(--border-radius-primary)*1.5)  0;
+    border-radius: 0 0 calc(var(--border-radius-primary)*1.5) 0;
     margin: -20px 0 0 -20px;
-
+    line-height: 1.3;
 }
 
 .carousel-img {
@@ -266,18 +268,22 @@ section .section-header {
 
 .carousel-heading {
     font-family: var(--font-family-primary);
-    font-size: clamp(2rem, 4vw, 3rem);
+    font-size: clamp(1.5rem, 4vw, 3rem);
     font-weight: var(--font-weight-bold);
     color: var(--color-light);
+    line-height: 1.3;
 }
-.fourth-section .section-header{
+
+.fourth-section .section-header {
     background-color: var(--color-darkest);
 }
+
 .carousel-text {
     font-family: var(--font-family-primary);
-    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-size: clamp(0.9rem, 2vw, 1.25rem);
     font-weight: var(--font-weight-normal);
     color: var(--color-light);
+    line-height: 1.7;
 }
 
 .carousel-btn {
@@ -303,8 +309,8 @@ main {
     background-image: url(../images/background.png);
     background-size: cover;
     background-color: var(--color-darkest);
-    height: 92vh;
-
+    height: auto;
+    padding: 50px 0;
     display: flex;
     justify-content: center;
     border-radius: 0 0 calc(var(--border-radius-primary)*15)0;
@@ -318,22 +324,22 @@ main {
     display: flex;
     justify-content: space-between;
     background-color: var(--color-darkest);
-    height: 94vh;
+    height: auto;
     scroll-margin-top: 87px;
-
 }
 
 .cards .card-component {
     width: 100%;
     display: flex;
     justify-content: space-evenly;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
 }
+
 .fourth-section .card-component {
     width: 100%;
     display: flex;
     justify-content: space-evenly;
-
+    flex-wrap: wrap;
 }
 
 .flip-card {
@@ -342,6 +348,13 @@ main {
     height: 350px;
     perspective: 1000px;
     font-family: var(--font-family-primary);
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.flip-card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .fliped-card-title {
@@ -356,7 +369,7 @@ main {
     width: 100%;
     height: 100%;
     text-align: center;
-    transition: transform 0.8s;
+    transition: transform 1.4s;
     transform-style: preserve-3d;
 }
 
@@ -366,7 +379,7 @@ main {
 
 .flip-card-front,
 .flip-card-back {
-    box-shadow: 0 8px 14px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 14px 0 var(--color-primary);
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -377,6 +390,7 @@ main {
     backface-visibility: hidden;
     border: 1px solid var(--color-primary);
     border-radius: 1rem;
+    padding: 1rem;
 }
 
 .flip-card-front {
@@ -387,10 +401,17 @@ main {
 
 .flip-card-back {
     text-align: left;
-    background: linear-gradient(120deg, var(--color-dark) 30%, var(--color-darkest) 88%,
-            var(--color-primary) 40%, var(--color-primary) 78%);
+    background: linear-gradient(135deg, var(--color-darkest) 0%, var(--color-dark) 100%);
     transform: rotateY(180deg);
     font-family: var(--font-family-primary);
+}
+
+.flip-card-back ul {
+    padding-left: 1rem;
+}
+
+.flip-card-back ul li {
+    margin-bottom: 0.5rem;
 }
 
 .flip-card-back ul li a {
@@ -399,14 +420,13 @@ main {
     font-weight: var(--font-weight-normal);
     text-decoration: none;
     padding: 5px 0;
+    display: inline-block;
+    transition: all 0.2s ease;
 }
 
 .flip-card-back ul li a:hover {
     color: var(--color-primary);
-    font-size: calc(var(--font-size-primary)*1.2);
-    font-weight: var(--font-weight-normal);
-    text-decoration: none;
-    padding: 5px 0;
+    transform: translateX(5px);
 }
 
 .cards {
@@ -417,6 +437,7 @@ main {
     margin-top: 100px;
     width: 100%;
 }
+
 .fourth-section .cards {
     display: flex;
     flex-wrap: wrap;
@@ -480,7 +501,6 @@ main {
     border-radius: 50%;
     left: 0px;
     background-color: var(--color-primary);
-    ;
 }
 
 .message,
@@ -562,8 +582,9 @@ main {
 .submit:hover {
     background-color: var(--color-primary);
 }
+
 .reset {
-    border: var(--color-primary) solid 1px;  
+    border: var(--color-primary) solid 1px;
     outline: none;
     padding: 10px;
     border-radius: 10px;
@@ -577,8 +598,9 @@ main {
     background-color: var(--color-primary);
     color: var(--color-dark);
     font-weight: var(--font-weight-bold);
-    border: var(--color-light) solid 2px;  
+    border: var(--color-light) solid 2px;
 }
+
 @keyframes pulse {
     from {
         transform: scale(0.9);
@@ -731,7 +753,7 @@ ul {
     align-items: center;
     justify-content: space-around;
     background-color: var(--color-darkest);
-    height: 94vh;
+    height: auto;
     scroll-margin-top: 87px;
 }
 
@@ -743,13 +765,21 @@ ul {
     background-color: rgba(0, 0, 0, 1);
     padding: 1.5rem;
     box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 2rem;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
 }
 
 .price {
-    font-size: 3rem;
+    font-size: clamp(2rem, 5vw, 3rem);
     line-height: 1;
     font-weight: 600;
     color: var(--color-primary);
+    margin-bottom: 1rem;
 }
 
 .lists {
@@ -757,7 +787,7 @@ ul {
     display: flex;
     flex-direction: column;
     grid-row-gap: 0.75rem;
-    row-gap: 0.75rem;
+    row-gap: 0.8rem;
     font-size: 0.875rem;
     line-height: 1.25rem;
     color: rgba(255, 255, 255, 1);
@@ -775,6 +805,7 @@ ul {
 
 .list span {
     margin-left: 1rem;
+    font-size: clamp(0.85rem, 1.5vw, 0.95rem);
 }
 
 .action {
@@ -796,4 +827,242 @@ ul {
 .action:hover {
     color: var(--color-primary);
     background-color: transparent;
+    transform: scale(1.03);
+}
+
+/* ===== Responsive Media Queries ===== */
+@media (max-width: 1200px) {
+    .carousel-img {
+        width: 900px;
+        height: 500px;
+    }
+
+    .notification {
+        width: 22rem;
+        height: 40rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .carousel-img {
+        width: 700px;
+        height: 400px;
+    }
+
+    .first-section .components {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .notification {
+        width: 90%;
+        max-width: 400px;
+        height: auto;
+        min-height: 500px;
+        margin: 20px 0;
+    }
+
+    .cards .card-component {
+        flex-wrap: wrap;
+    }
+
+    .flip-card {
+        margin-bottom: 30px;
+        width: 280px;
+        height: 380px;
+    }
+
+    .third-section {
+        flex-direction: column;
+    }
+
+    .form {
+        margin-top: 50px;
+    }
+
+    .carousel-caption {
+        position: relative;
+        right: auto;
+        left: auto;
+        padding-top: 15px;
+        color: var(--color-dark);
+    }
+
+    .carousel-caption .carousel-text {
+        color: var(--color-dark);
+    }
+
+    .card {
+        width: 80%;
+    }
+}
+
+@media (max-width: 768px) {
+    .carousel-img {
+        width: 500px;
+        height: 300px;
+    }
+
+    .searchBox {
+        max-width: 200px;
+    }
+
+    .notification {
+        width: 22rem;
+        height: 40rem;
+    }
+
+    .fourth-section .card-component {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card {
+        width: 80%;
+        margin-bottom: 30px;
+    }
+
+    footer {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .example-2 {
+        margin-top: 20px;
+    }
+
+    .carousel-heading {
+        font-size: clamp(1.5rem, 4vw, 2rem);
+    }
+
+    .carousel-text {
+        font-size: clamp(0.9rem, 2vw, 1rem);
+    }
+
+    .flip-card {
+        width: 240px;
+        height: 340px;
+    }
+
+    .flip-card-img {
+        width: 180px;
+        height: 180px;
+    }
+
+    .notibody .card-header {
+        font-size: 1.2rem;
+    }
+
+    .notibody .card-list {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .carousel-img {
+        width: 300px;
+        height: 200px;
+    }
+
+    .navbar-brand {
+        font-size: 24px !important;
+    }
+
+    .pip {
+        display: none;
+    }
+
+    .searchBox {
+        max-width: 150px;
+    }
+
+    .searchInput {
+        padding: 15px 36px 15px 15px;
+    }
+
+    .notification {
+        width: 100%;
+        min-height: 450px;
+    }
+
+    .notititle {
+        font-size: 1.8rem;
+    }
+
+    .notibody {
+        padding: 0 0.8rem;
+        font-size: 1rem;
+    }
+
+    .section-header {
+        font-size: calc(var(--font-size-primary)*2) !important;
+        padding: 15px 30px 15px 15px !important;
+    }
+
+    .flip-card {
+        width: 100%;
+        max-width: 260px;
+        height: 320px;
+    }
+
+    .flip-card-img {
+        width: 160px;
+        height: 160px;
+    }
+
+    .form {
+        width: 90%;
+        padding: 15px;
+        height: auto;
+    }
+
+    .title {
+        font-size: 24px;
+    }
+
+    .flex {
+        flex-direction: column;
+    }
+
+    .card {
+        width: 100%;
+    }
+
+    body {
+        font-size: 15px;
+    }
+
+    .flip-card-back ul li a {
+        font-size: 0.9rem;
+    }
+
+    .list span {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .carousel-img {
+        width: 250px;
+        height: 150px;
+    }
+
+    .notification {
+        width: 16rem;
+        height: 34rem;
+    }
+
+    .notititle {
+        font-size: 1.5rem;
+    }
+
+    .flip-card {
+        width: 200px;
+        height: 300px;
+    }
+
+    .flip-card-img {
+        width: 160px;
+        height: 160px;
+    }
 }
