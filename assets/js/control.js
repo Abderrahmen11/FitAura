@@ -4,7 +4,22 @@ let email = document.getElementById("email");
 let password = document.getElementById("password");
 let confirmPassword = document.getElementById("confirm");
 
-let validate = () => {
+document.getElementById('show-signin').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('register-form').style.display = 'none';
+    document.getElementById('signin-form').style.display = 'block';
+    void document.getElementById('signin-form').offsetHeight;
+});
+
+document.getElementById('show-register').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('signin-form').style.display = 'none';
+    document.getElementById('register-form').style.display = 'block';
+    void document.getElementById('register-form').offsetHeight;
+});
+
+
+function validateRegister() {
     let isValid = true;
 
     // Reset styles and error messages
@@ -94,6 +109,41 @@ let validate = () => {
 
     return isValid;
 }
+function validateSignin() {
+    let email = document.getElementById("signin-email");
+    let password = document.getElementById("signin-password");
+    let isValid = true;
+
+    // Reset styles and error messages
+    document.getElementById("signin-email-error").innerHTML = "";
+    document.getElementById("signin-password-error").innerHTML = "";
+
+    // Validate Email
+    let emailValue = email.value.trim();
+    if (emailValue === "") {
+        email.style.border = "1px solid red";
+        document.getElementById("signin-email-error").innerHTML = "<p style='color:red; font-size:13px'>Please enter your email</p>";
+        isValid = false;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)) {
+        email.style.border = "1px solid red";
+        document.getElementById("signin-email-error").innerHTML = "<p style='color:red; font-size:13px'>Please enter a valid email address</p>";
+        isValid = false;
+    }
+
+    // Validate Password
+    let passwordValue = password.value.trim();
+    if (passwordValue === "") {
+        password.style.border = "1px solid red";
+        document.getElementById("signin-password-error").innerHTML = "<p style='color:red; font-size:13px'>Please enter your password</p>";
+        isValid = false;
+    }
+
+    if (isValid) {
+        alert("Sign in successful! (This is a demo)");
+    }
+
+    return isValid;
+}
 
 class Member {
     #password;
@@ -140,4 +190,5 @@ let addMember = (newMember) => {
     alert("Member added successfully!");
     console.log(Members);
     return true;
+    return isValid;
 }

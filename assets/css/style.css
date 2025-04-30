@@ -18,7 +18,11 @@
     --font-weight-bolder: 900;
     --font-family-primary: "Poppins", sans-serif;
 }
-
+a {
+    text-decoration: none;
+    color: var(--color-primary);
+    transition: all 0.3s ease;
+}
 /* Base Styles */
 body {
     background-color: var(--color-bg-body);
@@ -333,6 +337,7 @@ main {
 
 .ul-card {
     padding-left: 1rem;
+    list-style: none;
 }
 
 .card-list {
@@ -455,7 +460,9 @@ main {
 .card {
     width: 100%;
     max-width: 320px;
+    height: 60%;
     display: flex;
+    justify-content: space-between;
     flex-direction: column;
     border-radius: 1.5rem;
     background-color: rgba(0, 0, 0, 1);
@@ -900,5 +907,29 @@ footer ul {
     .icon-content a svg {
         width: 18px;
         height: 18px;
+    }
+}
+
+#signin-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    max-width: 550px;
+    min-height: 500px;
+    justify-content: space-around;
+    padding: 1.5rem;
+    border-radius: 1.25rem;
+    position: relative;
+    background-color: #1a1a1a;
+    color: #fff;
+    border: 1px solid #333;
+    margin: 2rem auto;
+}
+
+@media (max-width: 768px) {
+    #signin-form {
+        min-height: auto;
+        padding: 1rem;
     }
 }
