@@ -8,14 +8,12 @@ document.getElementById('show-signin').addEventListener('click', function(e) {
     e.preventDefault();
     document.getElementById('register-form').style.display = 'none';
     document.getElementById('signin-form').style.display = 'block';
-    void document.getElementById('signin-form').offsetHeight;
 });
 
 document.getElementById('show-register').addEventListener('click', function(e) {
     e.preventDefault();
     document.getElementById('signin-form').style.display = 'none';
     document.getElementById('register-form').style.display = 'block';
-    void document.getElementById('register-form').offsetHeight;
 });
 
 
@@ -114,7 +112,6 @@ function validateSignin() {
     let password = document.getElementById("signin-password");
     let isValid = true;
 
-    // Reset styles and error messages
     document.getElementById("signin-email-error").innerHTML = "";
     document.getElementById("signin-password-error").innerHTML = "";
 
@@ -145,50 +142,50 @@ function validateSignin() {
     return isValid;
 }
 
-class Member {
-    #password;
-    constructor(firstName, lastName, email, password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.#password = password;
-    }
-    get firstName() {
-        return this.firstName;
-    }
-    set firstName(value) {
-        this.firstName = value;
-    }
-    get lastName() {
-        return this.lastName;
-    }
-    set lastName(value) {
-        this.lastName = value;
-    }
-    get email() {
-        return this.email;
-    }
-    set email(value) {
-        this.email = value;
-    }
-    get fullName() {
-        return `${this.firstName} ${this.lastName}`;
-    }
-    get password() {
-        return this.#password;
-    }
-    set password(value) {
-        this.#password = value;
-    }
-}
-let Members = [];
+// class Member {
+//     #password;
+//     constructor(firstName, lastName, email, password) {
+//         this.firstName = firstName;
+//         this.lastName = lastName;
+//         this.email = email;
+//         this.#password = password;
+//     }
+//     get firstName() {
+//         return this.firstName;
+//     }
+//     set firstName(value) {
+//         this.firstName = value;
+//     }
+//     get lastName() {
+//         return this.lastName;
+//     }
+//     set lastName(value) {
+//         this.lastName = value;
+//     }
+//     get email() {
+//         return this.email;
+//     }
+//     set email(value) {
+//         this.email = value;
+//     }
+//     get fullName() {
+//         return `${this.firstName} ${this.lastName}`;
+//     }
+//     get password() {
+//         return this.#password;
+//     }
+//     set password(value) {
+//         this.#password = value;
+//     }
+// }
+// let Members = [];
 
-const newMember = new Member(firstNameValue, lastNameValue, emailValue, passwordValue);
-let addMember = (newMember) => {
-    Members.push(newMember);
-    console.log(Members);
-    alert("Member added successfully!");
-    console.log(Members);
-    return true;
-    return isValid;
-}
+// const newMember = new Member(firstNameValue, lastNameValue, emailValue, passwordValue);
+// let addMember = (newMember) => {
+//     Members.push(newMember);
+//     console.log(Members);
+//     alert("Member added successfully!");
+//     console.log(Members);
+//     return true;
+//     return isValid;
+// }

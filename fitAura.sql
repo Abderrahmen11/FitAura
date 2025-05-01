@@ -1,202 +1,160 @@
--- Database: fitaura
-DROP DATABASE IF EXISTS fitaura;
-CREATE DATABASE fitaura CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE fitaura;
+-- Database creation
+CREATE DATABASE IF NOT EXISTS FitAura;
+USE FitAura;
 
--- Users Table
-CREATE TABLE users (
+-- Users table (for registration and login)
+CREATE TABLE IF NOT EXISTS users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
-    phone VARCHAR(20),
-    date_of_birth DATE,
-    gender ENUM('male', 'female', 'other') DEFAULT 'other',
-    profile_image VARCHAR(255),
-    membership_type ENUM('basic', 'standard', 'premium') DEFAULT 'basic',
-    join_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    registration_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     last_login DATETIME,
     is_active BOOLEAN DEFAULT TRUE,
-    reset_token VARCHAR(255),
-    reset_token_expiry DATETIME,
     CONSTRAINT chk_email CHECK (email LIKE '%@%.%')
-) ENGINE=InnoDB;
+);
 
--- Membership Plans Table
-CREATE TABLE membership_plans (
+-- User profiles (additional user information)
+CREATE TABLE IF NOT EXISTS user_profiles (
+    profile_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    birth_date DATE,
+    gender ENUM('Male', 'Female', 'Other'),
+    fitness_level ENUM('Beginner', 'Intermediate', 'Advanced'),
+    height DECIMAL(5,2), -- in cm
+    weight DECIMAL(5,2), -- in kg
+    goals TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+
+-- Membership plans (matches your pricing options)
+CREATE TABLE IF NOT EXISTS membership_plans (
     plan_id INT AUTO_INCREMENT PRIMARY KEY,
     plan_name VARCHAR(50) NOT NULL,
-    description TEXT,
     price DECIMAL(10,2) NOT NULL,
     duration_days INT NOT NULL,
-    features JSON,
-    is_active BOOLEAN DEFAULT TRUE,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
+    description TEXT,
+    features TEXT,
+    is_active BOOLEAN DEFAULT TRUE
+);
 
--- User Memberships Table
-CREATE TABLE user_memberships (
+-- Insert membership plans (from your pricing section)
+INSERT INTO membership_plans (plan_name, price, duration_days, description, features) VALUES
+('Basic Plan', 70.00, 30, 'Standard gym access', 'Access to all gym areas, Valid for 30 days, Flexible training times'),
+('Premium Plan', 350.00, 180, 'Enhanced features with guest pass', 'Free body composition test, 1 guest pass per month, Includes access to group classes'),
+('VIP Plan', 600.00, 365, 'Full access with personalization', 'Personalized workout plan, Unlimited access to all classes, Bring a friend 2x/month');
+
+-- User memberships
+CREATE TABLE IF NOT EXISTS user_memberships (
     membership_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     plan_id INT NOT NULL,
-    start_date DATETIME NOT NULL,
-    end_date DATETIME NOT NULL,
-    payment_status ENUM('pending', 'paid', 'failed', 'refunded') DEFAULT 'pending',
-    transaction_id VARCHAR(100),
-    auto_renew BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
-    FOREIGN KEY (plan_id) REFERENCES membership_plans(plan_id),
-    CONSTRAINT chk_end_date CHECK (end_date > start_date)
-) ENGINE=InnoDB;
+    start_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    end_date DATETIME,
+    is_active BOOLEAN DEFAULT TRUE,
+    payment_status ENUM('Pending', 'Paid', 'Failed', 'Refunded') DEFAULT 'Pending',
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (plan_id) REFERENCES membership_plans(plan_id)
+);
 
--- Muscle Groups Table
-CREATE TABLE muscle_groups (
-    group_id INT AUTO_INCREMENT PRIMARY KEY,
-    group_name VARCHAR(50) NOT NULL UNIQUE,
+-- Exercise categories
+CREATE TABLE IF NOT EXISTS exercise_categories (
+    category_id INT AUTO_INCREMENT PRIMARY KEY,
+    category_name VARCHAR(50) NOT NULL,
     description TEXT,
     image_url VARCHAR(255)
-) ENGINE=InnoDB;
+);
 
--- Exercises Table
-CREATE TABLE exercises (
+-- Insert categories (from your muscle groups)
+INSERT INTO exercise_categories (category_name, description) VALUES
+('Arms', 'Exercises targeting biceps, triceps, and forearms'),
+('Shoulders', 'Exercises for deltoids and rotator cuff muscles'),
+('Chest', 'Exercises focusing on pectoral muscles'),
+('Back', 'Exercises for latissimus dorsi, trapezius, and other back muscles'),
+('Legs', 'Exercises for quadriceps, hamstrings, glutes, and calves'),
+('Abdomen', 'Core exercises for abs and obliques');
+
+-- Difficulty levels
+CREATE TABLE IF NOT EXISTS difficulty_levels (
+    level_id INT AUTO_INCREMENT PRIMARY KEY,
+    level_name VARCHAR(50) NOT NULL,
+    description TEXT
+);
+
+-- Insert difficulty levels (from your user levels)
+INSERT INTO difficulty_levels (level_name, description) VALUES
+('Beginner', 'Simple movements with easy instructions, Focus on form and control'),
+('Intermediate', 'Compound movements & muscle isolation, Incorporates weights and machines'),
+('Advanced', 'Heavy lifting, super sets, and advanced techniques');
+
+-- Exercises
+CREATE TABLE IF NOT EXISTS exercises (
     exercise_id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
+    exercise_name VARCHAR(100) NOT NULL,
+    category_id INT NOT NULL,
+    level_id INT NOT NULL,
     description TEXT,
-    muscle_group_id INT,
-    equipment VARCHAR(100),
-    difficulty ENUM('beginner', 'intermediate', 'advanced') DEFAULT 'beginner',
     video_url VARCHAR(255),
-    image_url VARCHAR(255),
     instructions TEXT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (muscle_group_id) REFERENCES muscle_groups(group_id)
-) ENGINE=InnoDB;
+    FOREIGN KEY (category_id) REFERENCES exercise_categories(category_id),
+    FOREIGN KEY (level_id) REFERENCES difficulty_levels(level_id)
+);
 
--- Workout Plans Table
-CREATE TABLE workout_plans (
-    plan_id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    description TEXT,
-    level ENUM('beginner', 'intermediate', 'advanced') NOT NULL,
-    duration_weeks INT DEFAULT 4,
-    created_by INT,
-    is_public BOOLEAN DEFAULT TRUE,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (created_by) REFERENCES users(user_id) ON DELETE SET NULL
-) ENGINE=InnoDB;
+-- Insert sample exercises (from your flip cards)
+-- Arms - Beginner
+INSERT INTO exercises (exercise_name, category_id, level_id, description, video_url) VALUES
+('Dumbbell Bicep Curl', 1, 1, 'Basic bicep exercise with dumbbells', 'https://www.youtube.com/shorts/iui51E31sX8'),
+('Tricep Pushdown', 1, 1, 'Cable machine exercise for triceps', NULL),
+('Hammer Curl', 1, 1, 'Variation of bicep curl targeting brachialis', NULL);
 
--- Workout Plan Exercises (Junction Table)
-CREATE TABLE workout_plan_exercises (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    workout_plan_id INT NOT NULL,
-    exercise_id INT NOT NULL,
-    day_number INT NOT NULL,
-    sets INT DEFAULT 3,
-    reps INT DEFAULT 10,
-    rest_seconds INT DEFAULT 60,
-    notes TEXT,
-    FOREIGN KEY (workout_plan_id) REFERENCES workout_plans(plan_id) ON DELETE CASCADE,
-    FOREIGN KEY (exercise_id) REFERENCES exercises(exercise_id),
-    UNIQUE KEY (workout_plan_id, exercise_id, day_number)
-) ENGINE=InnoDB;
+-- Shoulders - Beginner
+INSERT INTO exercises (exercise_name, category_id, level_id, description, video_url) VALUES
+('Dumbbell Shoulder Press', 2, 1, 'Basic shoulder exercise with dumbbells', NULL),
+('Lateral Raises', 2, 1, 'Isolates medial deltoids', NULL),
+('Front Raises', 2, 1, 'Targets anterior deltoids', NULL);
 
--- User Workouts Table
-CREATE TABLE user_workouts (
+-- Add more exercises following the same pattern for all categories and levels...
+
+-- User workout plans
+CREATE TABLE IF NOT EXISTS user_workouts (
     workout_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    workout_plan_id INT,
-    start_date DATETIME NOT NULL,
-    end_date DATETIME,
-    status ENUM('in_progress', 'completed', 'paused') DEFAULT 'in_progress',
-    notes TEXT,
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
-    FOREIGN KEY (workout_plan_id) REFERENCES workout_plans(plan_id) ON DELETE SET NULL
-) ENGINE=InnoDB;
+    workout_name VARCHAR(100) NOT NULL,
+    created_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    is_active BOOLEAN DEFAULT TRUE,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
 
--- Workout Sessions Table
-CREATE TABLE workout_sessions (
-    session_id INT AUTO_INCREMENT PRIMARY KEY,
+-- Workout exercises (junction table)
+CREATE TABLE IF NOT EXISTS workout_exercises (
+    workout_exercise_id INT AUTO_INCREMENT PRIMARY KEY,
     workout_id INT NOT NULL,
-    session_date DATETIME NOT NULL,
-    duration_minutes INT,
-    notes TEXT,
-    rating TINYINT CHECK (rating BETWEEN 1 AND 5),
-    FOREIGN KEY (workout_id) REFERENCES user_workouts(workout_id) ON DELETE CASCADE
-) ENGINE=InnoDB;
-
--- Session Exercises Table
-CREATE TABLE session_exercises (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    session_id INT NOT NULL,
     exercise_id INT NOT NULL,
-    sets_completed INT,
-    reps_completed JSON, -- Stores array of reps for each set
-    weights_used JSON, -- Stores array of weights for each set
-    notes TEXT,
-    FOREIGN KEY (session_id) REFERENCES workout_sessions(session_id) ON DELETE CASCADE,
+    sets INT,
+    reps INT,
+    rest_seconds INT,
+    day_of_week ENUM('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'),
+    FOREIGN KEY (workout_id) REFERENCES user_workouts(workout_id) ON DELETE CASCADE,
     FOREIGN KEY (exercise_id) REFERENCES exercises(exercise_id)
-) ENGINE=InnoDB;
+);
 
--- Progress Photos Table
-CREATE TABLE progress_photos (
-    photo_id INT AUTO_INCREMENT PRIMARY KEY,
+-- User progress tracking
+CREATE TABLE IF NOT EXISTS user_progress (
+    progress_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    photo_url VARCHAR(255) NOT NULL,
-    photo_date DATE NOT NULL,
+    exercise_id INT NOT NULL,
+    date_recorded DATE NOT NULL,
+    weight_used DECIMAL(6,2),
+    reps INT,
+    sets INT,
     notes TEXT,
-    is_front_view BOOLEAN DEFAULT TRUE,
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
-) ENGINE=InnoDB;
-
--- Measurements Table
-CREATE TABLE measurements (
-    measurement_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    measurement_date DATE NOT NULL,
-    weight_kg DECIMAL(5,2),
-    height_cm DECIMAL(5,2),
-    body_fat_percentage DECIMAL(5,2),
-    chest_cm DECIMAL(5,2),
-    waist_cm DECIMAL(5,2),
-    hips_cm DECIMAL(5,2),
-    arms_cm DECIMAL(5,2),
-    thighs_cm DECIMAL(5,2),
-    notes TEXT,
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
-) ENGINE=InnoDB;
-
--- Insert Initial Data
-INSERT INTO membership_plans (plan_name, description, price, duration_days, features) VALUES
-('Basic', 'Access to basic gym facilities', 70.00, 30, '["Access to all gym areas", "Flexible training times"]'),
-('Standard', 'Standard membership with extra features', 350.00, 180, '["Free body composition test", "1 guest pass per month", "Access to group classes"]'),
-('Premium', 'Premium membership with all features', 600.00, 365, '["Personalized workout plan", "Unlimited access to all classes", "Bring a friend 2x/month"]');
-
-INSERT INTO muscle_groups (group_name, description) VALUES
-('Arms', 'Biceps, Triceps and Forearms'),
-('Shoulders', 'Deltoids and Rotator Cuff muscles'),
-('Chest', 'Pectoral muscles'),
-('Back', 'Latissimus dorsi, Trapezius and Rhomboids'),
-('Legs', 'Quadriceps, Hamstrings, Glutes and Calves'),
-('Abdomen', 'Abdominal and Core muscles');
-
--- Sample Exercises
-INSERT INTO exercises (name, description, muscle_group_id, equipment, difficulty, instructions) VALUES
-('Dumbbell Bicep Curl', 'Classic bicep exercise using dumbbells', 1, 'Dumbbells', 'beginner', 'Stand straight with dumbbells at sides...'),
-('Tricep Pushdown', 'Targets triceps using cable machine', 1, 'Cable Machine', 'beginner', 'Attach straight bar to high pulley...'),
-('Dumbbell Shoulder Press', 'Overhead press for shoulder development', 2, 'Dumbbells', 'intermediate', 'Sit on bench with back support...'),
-('Barbell Bench Press', 'Classic chest exercise', 3, 'Barbell', 'intermediate', 'Lie on bench with barbell at chest level...'),
-('Lat Pulldown', 'Works the latissimus dorsi', 4, 'Cable Machine', 'beginner', 'Sit at lat pulldown station...'),
-('Bodyweight Squats', 'Fundamental leg exercise', 5, 'None', 'beginner', 'Stand with feet shoulder-width apart...'),
-('Plank', 'Core strengthening exercise', 6, 'None', 'beginner', 'Hold position with forearms on ground...');
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (exercise_id) REFERENCES exercises(exercise_id)
+);
 
 -- Create indexes for performance
 CREATE INDEX idx_user_email ON users(email);
-CREATE INDEX idx_exercise_muscle_group ON exercises(muscle_group_id);
-CREATE INDEX idx_workout_plan_level ON workout_plans(level);
-CREATE INDEX idx_user_membership_dates ON user_memberships(start_date, end_date);
-
--- Create database user with privileges
-CREATE USER 'fitaura_admin'@'localhost' IDENTIFIED BY 'StrongPassword123!';
-GRANT ALL PRIVILEGES ON fitaura.* TO 'fitaura_admin'@'localhost';
-FLUSH PRIVILEGES;
+CREATE INDEX idx_user_membership ON user_memberships(user_id, is_active);
+CREATE INDEX idx_exercise_category ON exercises(category_id);
+CREATE INDEX idx_exercise_level ON exercises(level_id);
